@@ -27,10 +27,13 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        tableView.contentOffset.y = cellHeight * CGFloat(range / 2)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        tableView.contentOffset.y = tableView.contentSize.height / 2 - CGFloat(tableView.visibleCells.count / 2) * cellHeight
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -39,7 +42,7 @@ class ViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
 }
@@ -57,6 +60,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
 //        print("\(currentPage * range / 2 + indexPath.row); IP = \(indexPath.row)")
         cell.textLabel?.text = "\(currentPage * range / 2 + indexPath.row)"
+        if indexPath.row == 49 {
+            print("49!!!!!")
+            print(tableView.contentOffset.y)
+            print(cell.frame)
+            print("\(currentPage * range / 2 + indexPath.row); IP = \(indexPath.row)")
+        }
         return cell
     }
     
@@ -67,6 +76,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 isMoreDataLoading = true
                 currentPage -= 1
                 tableView.reloadData()
+                
                 scrollView.contentOffset.y = cellHeight * CGFloat(tableView.visibleCells.count * 2 + tableView.visibleCells.count / 2 + 3)
                 isMoreDataLoading = false
             }
@@ -75,11 +85,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             let scrollOffsetThreshold = scrollViewContentHeight - tableView.bounds.size.height
         
             if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.isDragging) {
-                //print("down")
                 isMoreDataLoading = true
                 currentPage += 1
                 tableView.reloadData()
-                scrollView.contentOffset.y = cellHeight * CGFloat(tableView.visibleCells.count * 2 - tableView.visibleCells.count / 2 + 3)
+                scrollView.contentOffset.y = tableView.contentSize.height / 2 - CGFloat(tableView.visibleCells.count - 1) * cellHeight
                 isMoreDataLoading = false
             }
         }
