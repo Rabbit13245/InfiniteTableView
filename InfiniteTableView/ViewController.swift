@@ -58,14 +58,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath)
-//        print("\(currentPage * range / 2 + indexPath.row); IP = \(indexPath.row)")
         cell.textLabel?.text = "\(currentPage * range / 2 + indexPath.row)"
-        if indexPath.row == 49 {
-            print("49!!!!!")
-            print(tableView.contentOffset.y)
-            print(cell.frame)
-            print("\(currentPage * range / 2 + indexPath.row); IP = \(indexPath.row)")
-        }
         return cell
     }
     
@@ -76,8 +69,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 isMoreDataLoading = true
                 currentPage -= 1
                 tableView.reloadData()
-                
-                scrollView.contentOffset.y = cellHeight * CGFloat(tableView.visibleCells.count * 2 + tableView.visibleCells.count / 2 + 3)
+                scrollView.contentOffset.y = tableView.contentSize.height / 2
                 isMoreDataLoading = false
             }
             
