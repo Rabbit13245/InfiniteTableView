@@ -21,7 +21,10 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         tableView.allowsSelection = false
-        tableView.separatorStyle = .none
+//        tableView.separatorStyle = .none
+        tableView.estimatedRowHeight = 0
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.estimatedSectionFooterHeight = 0
         return tableView
     }()
     
@@ -31,8 +34,7 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        tableView.contentOffset.y = tableView.contentSize.height / 2 - CGFloat(tableView.visibleCells.count / 2) * cellHeight
+        tableView.contentOffset.y = tableView.contentSize.height / 2 - tableView.bounds.height / 2
     }
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +51,8 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return cellHeight
+        return indexPath.row % 2 == 0 ? cellHeight * 2: cellHeight
+        //return cellHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -80,7 +83,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
                 isMoreDataLoading = true
                 currentPage += 1
                 tableView.reloadData()
-                scrollView.contentOffset.y = tableView.contentSize.height / 2 - CGFloat(tableView.visibleCells.count - 1) * cellHeight
+                scrollView.contentOffset.y = tableView.contentSize.height / 2 - tableView.bounds.height
                 isMoreDataLoading = false
             }
         }
