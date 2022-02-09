@@ -21,7 +21,6 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(TableViewCell.self, forCellReuseIdentifier: "TableViewCell")
         tableView.allowsSelection = false
-//        tableView.separatorStyle = .none
         tableView.estimatedRowHeight = 0
         tableView.estimatedSectionHeaderHeight = 0
         tableView.estimatedSectionFooterHeight = 0
@@ -36,10 +35,12 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         tableView.contentOffset.y = tableView.contentSize.height / 2 - tableView.bounds.height / 2
     }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.addSubview(tableView)
+        
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -52,7 +53,6 @@ class ViewController: UIViewController {
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.row % 2 == 0 ? cellHeight * 2: cellHeight
-        //return cellHeight
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,7 +68,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if (!isMoreDataLoading) {
             if scrollView.contentOffset.y <= 0 && tableView.isDragging {
-                //print("up: \(scrollView.contentOffset.y)")
                 isMoreDataLoading = true
                 currentPage -= 1
                 tableView.reloadData()
